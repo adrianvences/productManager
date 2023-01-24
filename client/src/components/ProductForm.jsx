@@ -14,7 +14,8 @@ function ProductForm({setLoaded}) {
     const newProduct ={
       title,
       price,
-      description
+      description,
+      isComplete: false
     };
     axios
       .post('http://localhost:5001/api/products', newProduct)

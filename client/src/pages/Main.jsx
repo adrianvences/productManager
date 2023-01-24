@@ -29,7 +29,8 @@ function Main() {
       <h1>Product Manager</h1>
       <ProductForm setLoaded={setLoaded} />
       <h1>All Products</h1>
-      {loaded && <ProductList products={reversedProducts} />}
+      {/* list component */}
+      {loaded && <ProductList products={reversedProducts} setLoaded={setLoaded} />}
     </div>
   );
 }

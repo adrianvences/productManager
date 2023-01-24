@@ -1,7 +1,14 @@
 
 
 // const PersonController = require('../controllers/person.controller');
-const {create,message ,findAll,findOne} = require('../controllers/product.controller');
+const {
+  create,
+  message,
+  findAll,
+  findOne,
+  updateOne,
+  deleteOne
+} = require('../controllers/product.controller'); // Here we import our controller methods
 
 const express = require('express');
 const productRouter = express.Router();
@@ -21,6 +28,8 @@ productRouter
 productRouter
   .route('/products/:id')
   .get(findOne)
+  .put(updateOne)
+  .delete(deleteOne);
 
   module.exports = productRouter;
 
