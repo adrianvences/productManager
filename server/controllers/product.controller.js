@@ -39,7 +39,8 @@ const findOne = (req,res) => {
 // update
 const updateOne = (req, res) => {
   const {id} = req.params;
-  Product.findByIdAndUpdate(id,req.body)
+
+  Product.findByIdAndUpdate(id,req.body, {new:true,runValidators:true}) // need this for update to run validations 
   .then(product => res.status(200).json(product))
   .catch(err => res.status(400).json(err));
 }

@@ -1,12 +1,25 @@
 
 
+// notes
+// we have to set up model for validations 
+
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
   // mongoose auto makes Ids
-  title: String,
-  price: Number,
-  description: String,
+  // model to hold error string
+  title: {
+    type: String,
+    required: [true, 'Title is required!']
+  },
+  price: {
+    type: Number,
+    required: [true,'Price is required!']
+  },
+  description: {
+    type: String,
+    required: [true, 'description is required!']
+  },
   isComplete: Boolean, 
 }, { timestamps: true }
 );

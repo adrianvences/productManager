@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({}); // tracks state for errors // errors step 1 //do not forget to add vals in update method
   const [product, setProduct] = useState({
     title: "",
     price: "",
@@ -47,22 +48,26 @@ function EditProduct() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:5001/api/products/${id}` , {
+      .put(`http://localhost:5001/api/products/${id}`, {
         //  this is sending the data to update from our edit form
+        // you can also replace this whole object and just put product if you hover over it you will see the object // cleans code up
         title: product.title,
         price: product.price,
         description: product.description,
         isComplete: product.isComplete,
-    })
-    .then((res) => { 
-      console.log(res.data); 
-      navigate('/products');  //redirects to main product page 
-    })
-    .catch((err) => console.log(err));
-  }
-
-    
-  
+      })
+      .then((res) => {
+        console.log(res.data);
+        setErrors({}); //step 2 errors
+        navigate("/products"); //redirects to main product page
+      })
+      .catch((err) => {
+        //errors part 3 // our catch is for when something went wrong with post
+        console.log(err);
+        setErrors(err?.response?.data?.errors); // we had to drill down in console to find these keys
+        // ? means optional chaining // returns undefined instead of error if it is undef or null // so it wont break the app
+      }); // when we error out if we error out in our handle submit we will come here and sets the error
+  };
 
   return (
     <div>
@@ -70,7 +75,7 @@ function EditProduct() {
         Edit Product :
         <div className="card">
           <div className="card-body">
-            <form onSubmit={handleSubmit} >
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
                   Title:
@@ -83,6 +88,13 @@ function EditProduct() {
                   value={product.title}
                   onChange={handleChange}
                 />
+                { // part 4 to errors and put in the rest
+                  errors?.title && ( // ? means optional chaining // returns undefined instead of error if it is undef or null // so it wont break the app
+                    <span className="form-text text-danger">
+                      {errors.title.message}
+                    </span>
+                  ) // if there is an error it sends out the span
+                }
               </div>
 
               <div className="mb-3">
@@ -97,6 +109,13 @@ function EditProduct() {
                   value={product.price}
                   onChange={handleChange}
                 />
+                {
+                  errors?.price && ( // ? means optional chaining // returns undefined instead of error if it is undef or null // so it wont break the app
+                    <span className="form-text text-danger">
+                      {errors.price.message}
+                    </span>
+                  ) // if there is an error it sends out the span
+                }
               </div>
 
               <div className="mb-3">
@@ -111,6 +130,13 @@ function EditProduct() {
                   value={product.description}
                   onChange={handleChange}
                 />
+                {
+                  errors?.description && ( // ? means optional chaining // returns undefined instead of error if it is undef or null // so it wont break the app
+                    <span className="form-text text-danger">
+                      {errors.description.message}
+                    </span>
+                  ) // if there is an error it sends out the span
+                }
               </div>
               <div className="form-check mb-3">
                 <input
@@ -121,10 +147,14 @@ function EditProduct() {
                   checked={product.isComplete}
                   onChange={handleCheck}
                 />
-                <label htmlFor="isComplete" className="form-check-label">Completed?</label>
+                <label htmlFor="isComplete" className="form-check-label">
+                  Completed?
+                </label>
               </div>
               <div className="d-flex justify-content-end">
-                <button type="submit" className="btn btn-primary">Edit Product</button>
+                <button type="submit" className="btn btn-primary">
+                  Edit Product
+                </button>
               </div>
             </form>
           </div>
@@ -132,6 +162,6 @@ function EditProduct() {
       </h1>
     </div>
   );
-  }
+}
 
 export default EditProduct;
